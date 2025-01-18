@@ -10,13 +10,13 @@ module.exports = async (req, res, next) => {
     if (!req.cookies.token) {
         //no token - so no entry
         req.flash("error", "you need to login first")
-        return res.direct("/")
+        return res.redirect("/")
     }
 
     try {
         //agr token hai to decode krke check krege
         let decoded = jwt.verify(req.cookies.token, process.env.JWT_KEY); //token aur key compare kr k , email nikalege
-        let user = userModel.findOne({ email: decoded.email }).select("-password"); //-password mtlb password chor kr
+        let user = await userModel.findOne({ email: decoded.email }).select("-password"); //-password mtlb password chor kr
         req.user = user;
         next()
     }

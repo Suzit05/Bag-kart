@@ -1,6 +1,7 @@
 //test   ---- test1 ----- test@test.com
 
 const userModel = require("../models/user.models")
+const productModel = require("../models/product.models")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { generatetoken } = require("../utils/generatetoken") //utils k andr se laya gya jha token bn rha
@@ -54,16 +55,24 @@ module.exports.registerUser = async (req, res) => {
 
 module.exports.loginUser = async (req, res) => {
     let { email, password } = req.body
-    let user = await userModel.findOne({ email: email })
-    if (!user) return res.send("Email or password is incorrect");
-    bcrypt.compare(password, user.password, (err, result) => {   //bcrypt.compare( plain password, hash password)
-        if (result) {
-            let token = generatetoken(user)
-            res.cookie("token", token)
-            res.render("shop")
-        }
-    })
-    //jb compare ho gya hai aur result true ho
-    //to fir token bnao
+    try {
+        let user = await userModel.findOne({ email: email })
+        if (!user) return res.send("Email or password is incorrect");
+        bcrypt.compare(password, user.password, async (err, result) => {   //bcrypt.compare( plain password, hash password)
+            if (result) {
+                let token = generatetoken(user)
+                res.cookie("token", token)
+                let products = await productModel.find();
+                res.render("shop", { products })
+            }
+        })
+        //jb compare ho gya hai aur result true ho
+        //to fir token bnao
+    }
+    catch (err) {
+
+        res.status(500).send("Something went wrong");
+    }
+
 
 }

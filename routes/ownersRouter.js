@@ -29,6 +29,11 @@ if (process.env.NODE_ENV === "development") {
 }
 
 
+router.get("/admin", (req, res) => {
+    let success = req.flash("success") //success k message ko ek variable m store kr rhe hai
+    res.render("createproducts", { success }) //aur success ko ejs m bhej rahe taki use frontend m use kr paye
+})
+
 
 
 
