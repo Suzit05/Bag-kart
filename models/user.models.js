@@ -11,10 +11,10 @@ const userSchema = mongoose.Schema({
     },
     email: String,
     password: String,
-    cart: {
-        type: Array,
-        default: []
-    },
+    cart: [{
+        type: mongoose.Schema.Types.ObjectId,   //product k id lega
+        ref: "product"
+    }],
 
     orders: {
         type: Array,

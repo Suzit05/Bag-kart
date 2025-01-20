@@ -32,7 +32,7 @@ app.use(expressSession({
 app.set("view engine", "ejs")
 
 
-app.use("/owners", ownersRouter)
+app.use("/owners", ownersRouter)  //owners/admin to create products
 app.use("/users", usersRouter)
 app.use("/products", productsRouter)
 app.use("/", index)

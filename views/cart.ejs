@@ -1,46 +1,67 @@
 <%- include('./partials/header') %>
-    <div class="w-full h-screen flex items-start px-20 py-20 gap-10">
-        <div class="w-[30%] rounded-md overflow-hidden">
-            <div class="w-full h-80 bg-yellow-500"></div>
-            <div class="w-full flex justify-between px-5 py-4">
-                <h3 class="text-2xl">Clinge Bag</h3>
-                <div class="flex items-center gap-2">
-                    <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-add-line"></i>
-                    <div class="px-2 py-1 rounded-md bg-white text-black">01</div>
-                    <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
+    <div class="w-full px-20 py-20">
+        <h2 class="text-3xl font-semibold mb-10">Your Cart</h2>
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <% user.cart.forEach(function(product) { %>
+                <div class="rounded-md overflow-hidden shadow-md border">
+                    <div class="w-full h-64 flex items-center justify-center bg-[<%= product.bgcolor %>]">
+                        <img class="h-[12rem] object-contain"
+                            src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="">
+                    </div>
+                    <div class="p-5 bg-[<%= product.panelcolor %>]">
+                        <h3 class="text-lg font-bold text-gray-800">
+                            <%= product.name %>
+                        </h3>
+                        <div class="flex items-center justify-between mt-3">
+                            <span class="text-green-600 font-semibold text-xl">₹<%= product.price %></span>
+                            <div class="flex items-center gap-3">
+                                <i
+                                    class="ri-add-line w-6 h-6 bg-white flex rounded-full items-center justify-center cursor-pointer"></i>
+                                <span class="px-3 py-1 rounded-md bg-white text-black">01</span>
+                                <i
+                                    class="ri-subtract-line w-6 h-6 bg-white flex rounded-full items-center justify-center cursor-pointer"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between px-5 py-3 bg-[<%= product.textcolor %>] text-black">
+                        <h4>Net Total</h4>
+                        <h4>₹<%= product.price %>
+                        </h4>
+                    </div>
                 </div>
-            </div>
-            <div class="flex items-center justify-between px-5 py-3">
-                <h4 class="text-lg">Net Total</h4>
-                <h2 class="text-lg">₹ 1200</h2>
-            </div>
+                <% }) %>
         </div>
-        <div class="w-[70%]">
-            <h3 class="text-xl">Price Breakdown</h3>
-            <div class="px-10 mt-5">
-                <div class="flex mt-2">
-                    <h4 class="w-1/3">Total MRP</h4>
-                    <h4>₹ 1920</h4>
-                </div>
-                <div class="flex mt-2">
-                    <h4 class="w-1/3">Discount on MRP</h4>
-                    <h4>₹ 0</h4>
-                </div>
-                <div class="flex mt-2">
-                    <h4 class="w-1/3">Platform Fee</h4>
-                    <h4>₹ 20</h4>
-                </div>
-                <div class="flex mt-2">
-                    <h4 class="w-1/3">Shipping Fee</h4>
-                    <h4>FREE</h4>
-                </div>
-            </div>
-            <div class="w-full h-[1px] bg-black mt-10"></div>
-            <div class="flex mt-5">
-                <h3 class="w-1/3 text-xl">Total Amount</h3>
-                <h3 class="font-semibold text-xl text-green-600">₹ 1940</h3>
-            </div>
-            <form action=""></form>
+        <!-- Price Breakdown -->
+        <div class="mt-10 p-5 border rounded-md bg-gray-50 shadow-md">
+            <h3 class="text-2xl font-semibold mb-5">Price Breakdown</h3>
+            <% let totalMRP=0; let totalDiscount=0; %>
+                <% user.cart.forEach(function(product) { totalMRP +=parseFloat(product.price); totalDiscount
+                    +=parseFloat(product.discount); }); %>
+                    <div class="flex justify-between border-b pb-2 mb-2">
+                        <span>Total MRP</span>
+                        <span>₹ <%= totalMRP %></span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2 mb-2">
+                        <span>Discount on MRP</span>
+                        <span>₹ <%= totalDiscount %></span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2 mb-2">
+                        <span>Platform Fee</span>
+                        <span>₹ 20</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2 mb-2">
+                        <span>Shipping Fee</span>
+                        <span>FREE</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-lg">
+                        <span>Total Amount</span>
+                        <span class="text-green-600">₹ <%= totalMRP - totalDiscount + 20 %></span>
+                    </div>
         </div>
+        <div class="flex justify-center items-center mt-10">
+            <button class="bg-blue-500 text-white px-2 py-1 rounded-md font-bold">Buy now</button>
+        </div>
+
     </div>
     <%- include('./partials/footer') %>

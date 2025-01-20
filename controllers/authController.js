@@ -63,7 +63,8 @@ module.exports.loginUser = async (req, res) => {
                 let token = generatetoken(user)
                 res.cookie("token", token)
                 let products = await productModel.find();
-                res.render("shop", { products })
+                let success = req.flash("success")
+                res.render("shop", { products, success })
             }
         })
         //jb compare ho gya hai aur result true ho
@@ -76,3 +77,14 @@ module.exports.loginUser = async (req, res) => {
 
 
 }
+
+module.exports.logoutUser = (req, res) => {
+    try {
+        // Clear the token cookie
+        res.clearCookie("token");
+        // Redirect to home page
+        res.redirect("/");
+    } catch (err) {
+        res.status(500).send("Something went wrong during logout");
+    }
+};
